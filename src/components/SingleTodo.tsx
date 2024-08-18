@@ -1,6 +1,8 @@
 import {TodoDataType} from "@/utils/information";
 import {Trash} from "lucide-react";
 import {useState} from "react";
+import DelTodo from "./DelTodo";
+import EditTodo from "./EditTodo";
 
 const SingleTodo = ({todoInfo}: {todoInfo: TodoDataType}) => {
   const [done, setDone] = useState(false);
@@ -24,9 +26,11 @@ const SingleTodo = ({todoInfo}: {todoInfo: TodoDataType}) => {
           </div>
         </div>
 
-        <button className="btn btn-circle btn-ghost p-0">
-          <Trash size={20} color="red" />
-        </button>
+        <div className="">
+          <EditTodo todoId={todoInfo.id} />
+
+          <DelTodo todoId={todoInfo.id} />
+        </div>
       </div>
     </>
   );
