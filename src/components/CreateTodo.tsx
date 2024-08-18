@@ -7,7 +7,7 @@ const CreateTodo = () => {
     register,
     handleSubmit,
     reset,
-    formState: {isSubmitting},
+    formState: {isSubmitting, errors},
   } = useForm<TodoFormType>({
     resolver: zodResolver(todoSchemaType),
     mode: "all",
@@ -33,6 +33,8 @@ const CreateTodo = () => {
           className="input w-full rounded-full border-none bg-orange-100 text-black outline-none focus:border-none focus:outline-none active:border-none active:outline-none"
           {...register("todoName")}
         />
+
+        <span className="text-red-600">{errors.todoName?.message}</span>
 
         <button
           type="submit"
