@@ -1,8 +1,12 @@
 import {TodoFormType, todoSchemaType} from "@/utils/information";
 import {zodResolver} from "@hookform/resolvers/zod";
+import {useQueryClient} from "@tanstack/react-query";
+import ky from "ky";
 import {useForm} from "react-hook-form";
 
 const CreateTodo = () => {
+  const queryClient = useQueryClient();
+
   const {
     register,
     handleSubmit,
@@ -14,9 +18,11 @@ const CreateTodo = () => {
   });
 
   const addTodoFn = async (fData: TodoFormType) => {
-    await new Promise((r) => setTimeout(r, 2000));
+    await ky.post("http://localhost:5050/todos", {
+      json: fData,
+    });
 
-    console.log(fData);
+    queryClient.refetchQueries({queryKey: ["todoData"]});
 
     reset();
   };

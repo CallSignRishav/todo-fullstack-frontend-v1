@@ -1,7 +1,8 @@
+import {TodoDataType} from "@/utils/information";
 import {Trash} from "lucide-react";
 import {useState} from "react";
 
-const SingleTodo = () => {
+const SingleTodo = ({todoInfo}: {todoInfo: TodoDataType}) => {
   const [done, setDone] = useState(false);
 
   return (
@@ -19,7 +20,7 @@ const SingleTodo = () => {
           <div
             className={`text-start text-black ${done ? "line-through" : ""}`}
           >
-            Good Morning Good Morning Good Morning
+            {todoInfo.todoName}
           </div>
         </div>
 

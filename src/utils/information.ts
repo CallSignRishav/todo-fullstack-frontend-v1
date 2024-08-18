@@ -8,3 +8,10 @@ export const todoSchemaType = z.object({
 });
 
 export type TodoFormType = z.infer<typeof todoSchemaType>;
+
+export type TodoDataType = {
+  id: string;
+  todoName: string;
+};
+
+export type TodoDataArray = TodoDataType[];
