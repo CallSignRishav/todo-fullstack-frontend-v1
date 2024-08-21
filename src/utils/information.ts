@@ -12,6 +12,7 @@ export type TodoFormType = z.infer<typeof todoSchemaType>;
 export type TodoDataType = {
   id: string;
   todoName: string;
+  isCompleted: boolean;
 };
 
 export type TodoDataArray = TodoDataType[];

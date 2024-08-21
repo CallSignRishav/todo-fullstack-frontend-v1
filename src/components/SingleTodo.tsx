@@ -1,11 +1,28 @@
 import {TodoDataType} from "@/utils/information";
-import {Trash} from "lucide-react";
+import ky from "ky";
 import {useState} from "react";
 import DelTodo from "./DelTodo";
 import EditTodo from "./EditTodo";
 
 const SingleTodo = ({todoInfo}: {todoInfo: TodoDataType}) => {
-  const [done, setDone] = useState(false);
+  const [done, setDone] = useState(todoInfo.isCompleted);
+
+  // const queryClient = useQueryClient();
+
+  const completeRead = async () => {
+    setDone(!done);
+
+    // console.log(todoInfo.id);
+
+    const req = await ky.patch(
+      `http://localhost:5050/todos/read/${todoInfo.id}`,
+      {
+        json: {isCompleted: done},
+      },
+    );
+
+    // queryClient.refetchQueries({queryKey: ["todoData"]});
+  };
 
   return (
     <>
@@ -13,7 +30,9 @@ const SingleTodo = ({todoInfo}: {todoInfo: TodoDataType}) => {
         <div className="flex gap-2">
           <div className="flex items-center">
             <input
-              onClick={() => setDone(!done)}
+              onClick={completeRead}
+              // checked={todoInfo.isCompleted ? true : false}
+              // onChange={completeRead}
               type="checkbox"
               className="checkbox-success checkbox p-1"
             />
