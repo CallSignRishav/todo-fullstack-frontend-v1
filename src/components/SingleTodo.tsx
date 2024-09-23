@@ -1,8 +1,31 @@
-import {Trash} from "lucide-react";
-import {useState} from "react";
+import {TodoDataType} from "@/utils/information";
+import ky from "ky";
+import DelTodo from "./DelTodo";
+import EditTodo from "./EditTodo";
+import {useQueryClient} from "@tanstack/react-query";
 
-const SingleTodo = () => {
-  const [done, setDone] = useState(false);
+const SingleTodo = ({todoInfo}: {todoInfo: TodoDataType}) => {
+  const queryClient = useQueryClient();
+
+  const completeRead = async () => {
+    if (todoInfo.isCompleted) {
+      const req = await ky.patch(
+        `http://localhost:5050/todos/read/${todoInfo.id}`,
+        {
+          json: {isCompleted: false},
+        },
+      );
+    } else {
+      const req = await ky.patch(
+        `http://localhost:5050/todos/read/${todoInfo.id}`,
+        {
+          json: {isCompleted: true},
+        },
+      );
+    }
+
+    queryClient.refetchQueries({queryKey: ["todoData"]});
+  };
 
   return (
     <>
@@ -10,22 +33,26 @@ const SingleTodo = () => {
         <div className="flex gap-2">
           <div className="flex items-center">
             <input
-              onClick={() => setDone(!done)}
+              onClick={completeRead}
+              defaultChecked={todoInfo.isCompleted ? true : false}
+              // onChange={completeRead}
               type="checkbox"
               className="checkbox-success checkbox p-1"
             />
           </div>
 
           <div
-            className={`text-start text-black ${done ? "line-through" : ""}`}
+            className={`text-start text-black ${todoInfo.isCompleted ? "line-through" : ""}`}
           >
-            Good Morning Good Morning Good Morning
+            {todoInfo.todoName}
           </div>
         </div>
 
-        <button className="btn btn-circle btn-ghost p-0">
-          <Trash size={20} color="red" />
-        </button>
+        <div className="">
+          <EditTodo todoId={todoInfo.id} />
+
+          <DelTodo todoId={todoInfo.id} />
+        </div>
       </div>
     </>
   );
